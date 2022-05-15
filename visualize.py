@@ -26,7 +26,9 @@ transform_test = transforms.Compose([
 def rgb2gray(rgb):
     return np.dot(rgb[...,:3], [0.299, 0.587, 0.114])
 
-raw_img = io.imread('images/1.jpg')
+# Path of the image file to be read
+raw_img = io.imread('./images/annotated_images/annotated_image0.png')
+
 gray = rgb2gray(raw_img)
 gray = resize(gray, (48,48), mode='symmetric').astype(np.uint8)
 
@@ -39,16 +41,13 @@ inputs = transform_test(img)
 class_names = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
 
 net = VGG('VGG19')
-# checkpoint = torch.load(os.path.join('FER2013_VGG19', 'PrivateTest_model.t7'))
 checkpoint = torch.load(os.path.join('FER2013_VGG19', 'PrivateTest_model.t7'), map_location=torch.device('cpu'))
 net.load_state_dict(checkpoint['net'])
-# net.cuda()
 net.eval()
 
 ncrops, c, h, w = np.shape(inputs)
 
 inputs = inputs.view(-1, c, h, w)
-# inputs = inputs.cuda()
 inputs = Variable(inputs, volatile=True)
 outputs = net(inputs)
 
@@ -80,7 +79,7 @@ plt.ylabel(" Classification Score ",fontsize=16)
 plt.xticks(ind, class_names, rotation=45, fontsize=14)
 
 axes=plt.subplot(1, 3, 3)
-emojis_img = io.imread('images/emojis/%s.png' % str(class_names[int(predicted.cpu().numpy())]))
+emojis_img = io.imread('./images/emojis/%s.png' % str(class_names[int(predicted.cpu().numpy())]))
 plt.imshow(emojis_img)
 plt.xlabel('Emoji Expression', fontsize=16)
 axes.set_xticks([])
@@ -89,7 +88,7 @@ plt.tight_layout()
 # show emojis
 
 #plt.show()
-plt.savefig(os.path.join('images/results/l.png'))
+plt.savefig(os.path.join('./images/results/l.png'))
 plt.close()
 
 print("The Expression is %s" %str(class_names[int(predicted.cpu().numpy())]))
