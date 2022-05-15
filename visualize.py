@@ -39,15 +39,16 @@ inputs = transform_test(img)
 class_names = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
 
 net = VGG('VGG19')
-checkpoint = torch.load(os.path.join('FER2013_VGG19', 'PrivateTest_model.t7'))
+# checkpoint = torch.load(os.path.join('FER2013_VGG19', 'PrivateTest_model.t7'))
+checkpoint = torch.load(os.path.join('FER2013_VGG19', 'PrivateTest_model.t7'), map_location=torch.device('cpu'))
 net.load_state_dict(checkpoint['net'])
-net.cuda()
+# net.cuda()
 net.eval()
 
 ncrops, c, h, w = np.shape(inputs)
 
 inputs = inputs.view(-1, c, h, w)
-inputs = inputs.cuda()
+# inputs = inputs.cuda()
 inputs = Variable(inputs, volatile=True)
 outputs = net(inputs)
 
