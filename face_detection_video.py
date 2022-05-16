@@ -10,7 +10,7 @@ mp_drawing = mp.solutions.drawing_utils
 
 def face_detection(video_path):
     # Read the video from specified path
-    cam = cv2.VideoCapture("./videos/00008.mp4")
+    cam = cv2.VideoCapture(video_path)
 
     try:
         # creating a folder named data
